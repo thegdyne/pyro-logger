@@ -1,0 +1,8 @@
+{
+  "appId": "com.pyrologger.app",
+  "appName": "Pyro Logger",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}
