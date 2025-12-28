@@ -2,12 +2,12 @@
   "name": "Pyro Logger",
   "short_name": "PyroLog",
   "description": "Weekly Pyrotechnic Work Experience Log for Joint Industry SFX Grading Scheme",
-  "start_url": "/",
+  "start_url": "/pyro-logger/",
   "display": "standalone",
   "background_color": "#1a1a2e",
   "theme_color": "#3b82f6",
   "orientation": "portrait-primary",
-  "scope": "/",
+  "scope": "/pyro-logger/",
   "icons": [
     {
       "src": "icons/icon-72.png",

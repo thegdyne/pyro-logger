@@ -1,17 +1,17 @@
 // Pyro Logger Service Worker
 const CACHE_NAME = 'pyro-logger-v1';
 const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icons/icon-72.png',
-  '/icons/icon-96.png',
-  '/icons/icon-128.png',
-  '/icons/icon-144.png',
-  '/icons/icon-152.png',
-  '/icons/icon-192.png',
-  '/icons/icon-384.png',
-  '/icons/icon-512.png'
+  '/pyro-logger/',
+  '/pyro-logger/index.html',
+  '/pyro-logger/manifest.json',
+  '/pyro-logger/icons/icon-72.png',
+  '/pyro-logger/icons/icon-96.png',
+  '/pyro-logger/icons/icon-128.png',
+  '/pyro-logger/icons/icon-144.png',
+  '/pyro-logger/icons/icon-152.png',
+  '/pyro-logger/icons/icon-192.png',
+  '/pyro-logger/icons/icon-384.png',
+  '/pyro-logger/icons/icon-512.png'
 ];
 
 // External CDN resources to cache
