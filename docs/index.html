@@ -1870,21 +1870,22 @@ ${Object.entries(diagnostics).map(([k, v]) => `${k}: ${typeof v === 'object' ? J
                 else if (/Windows/.test(ua)) deviceType = 'Windows';
                 else if (/Mac/.test(ua)) deviceType = 'Mac';
                 
-                // Send to tracking form
-                fetch(INSTALL_TRACKING_ENDPOINT, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        device_id: deviceId,
-                        installed_at: new Date().toISOString(),
-                        device_type: deviceType,
-                        app_version: APP_VERSION,
-                        source: source
-                    })
-                }).then(() => {
+                // Send to tracking using sendBeacon (no CORS issues)
+                const data = JSON.stringify({
+                    device_id: deviceId,
+                    installed_at: new Date().toISOString(),
+                    device_type: deviceType,
+                    app_version: APP_VERSION,
+                    source: source
+                });
+                
+                const sent = navigator.sendBeacon(INSTALL_TRACKING_ENDPOINT, data);
+                if (sent) {
                     localStorage.setItem('pyro_install_tracked', 'true');
                     console.log('Install tracked via ' + source);
-                }).catch(err => console.log('Install tracking failed:', err));
+                } else {
+                    console.log('Install tracking: sendBeacon failed');
+                }
             } catch (e) {
                 console.log('Install tracking error:', e);
             }
