@@ -52,6 +52,38 @@ jobs:
           echo "Patched manifest.json for ${{ steps.env.outputs.env }}:"
           cat manifest.json
       
+      - name: Patch QR code URL
+        run: |
+          cd docs
+          BASE_PATH="${{ steps.env.outputs.base_path }}"
+          FULL_URL="https://thegdyne.github.io${BASE_PATH}/"
+          DISPLAY_URL="thegdyne.github.io${BASE_PATH}"
+          
+          # Patch QR code image src
+          sed -i "s|data=https://thegdyne.github.io/pyro-logger/|data=${FULL_URL}|g" index.html
+          
+          # Patch display URL text
+          sed -i "s|thegdyne.github.io/pyro-logger</p>|${DISPLAY_URL}</p>|g" index.html
+          
+          echo "Patched QR code to: ${FULL_URL}"
+      
+      - name: Patch service worker
+        run: |
+          cd docs
+          BASE_PATH="${{ steps.env.outputs.base_path }}"
+          ENV="${{ steps.env.outputs.env }}"
+          
+          # Replace all /pyro-logger/ paths with correct base path
+          sed -i "s|/pyro-logger/|${BASE_PATH}/|g" service-worker.js
+          
+          # Add env suffix to cache name to avoid collisions
+          if [ "$ENV" = "dev" ]; then
+            sed -i "s|pyro-logger-v|pyro-logger-dev-v|g" service-worker.js
+          fi
+          
+          echo "Patched service-worker.js for ${BASE_PATH}"
+          cat service-worker.js
+      
       - name: Add DEV banner to icons
         if: steps.env.outputs.env == 'dev'
         run: |
