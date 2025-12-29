@@ -839,11 +839,19 @@
             textarea.addEventListener('input', function() {
                 const text = this.value;
                 // Count lines: explicit newlines + wrapped lines
-                const explicitLines = text.split('\n');
                 let totalLines = 0;
-                explicitLines.forEach(line => {
-                    totalLines += Math.max(1, Math.ceil(line.length / charsPerLine));
-                });
+                if (text.length === 0) {
+                    totalLines = 0;
+                } else {
+                    const explicitLines = text.split('\n');
+                    explicitLines.forEach(line => {
+                        if (line.length === 0) {
+                            totalLines += 1; // Empty line still counts as 1
+                        } else {
+                            totalLines += Math.ceil(line.length / charsPerLine);
+                        }
+                    });
+                }
                 
                 // Update counter
                 const displayMax = (id === 'explosives' && totalLines > maxLines) ? expandLines : maxLines;
