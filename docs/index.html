@@ -1213,7 +1213,9 @@
             doc.text('SM – November 2005', rightMargin, 770, { align: 'right' });
             
             // Save - cross-platform with native app support
-            const filename = `pyro-log-${data.date || 'undated'}.pdf`;
+            const safeName = (data.name || 'unknown').replace(/[^a-zA-Z0-9]/g, '-').substring(0, 20);
+            const safeDate = data.date || 'undated';
+            const filename = `PyroLog-${safeName}-${safeDate}.pdf`;
             const pdfBase64 = doc.output('datauristring').split(',')[1];
             const pdfBlob = doc.output('blob');
             
@@ -1239,6 +1241,7 @@
                     console.error('Native save error:', err);
                     // Fallback to blob download
                     doc.save(filename);
+                    alert(`PDF saved: ${filename}`);
                 }
             } else {
                 // Web browser - use appropriate method
@@ -1258,6 +1261,7 @@
                     }
                 } else {
                     doc.save(filename);
+                    alert(`PDF saved: ${filename}`);
                 }
             }
             
