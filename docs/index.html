@@ -328,9 +328,394 @@
                 justify-content: space-between;
             }
         }
+        
+        /* ========================================
+           INSTALLER LANDING PAGE STYLES
+           ======================================== */
+        
+        /* Display mode detection - browser shows installer, standalone shows app */
+        #app { display: none; }
+        #installer { display: flex; }
+        
+        @media (display-mode: standalone) {
+            #app { display: block; }
+            #installer { display: none !important; }
+        }
+        
+        /* iOS standalone detection fallback */
+        @media (display-mode: fullscreen) {
+            #app { display: block; }
+            #installer { display: none !important; }
+        }
+        
+        /* Installer layout */
+        #installer {
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .installer-content {
+            max-width: 400px;
+            width: 100%;
+        }
+        
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 24px;
+            border-radius: 24px;
+            box-shadow: 0 8px 30px rgba(59, 130, 246, 0.3);
+        }
+        
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+        }
+        
+        .app-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .app-tagline {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            font-size: 14px;
+        }
+        
+        .install-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .install-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        
+        .install-btn.btn-ios {
+            background: #333;
+            color: #fff;
+        }
+        
+        .install-btn.btn-android {
+            background: #3ddc84;
+            color: #000;
+        }
+        
+        .already-installed {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-top: 24px;
+        }
+        
+        /* Instructions screens */
+        .instructions-screen {
+            display: none;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: max(20px, env(safe-area-inset-top));
+        }
+        
+        .instructions-screen.active {
+            display: block;
+        }
+        
+        .instructions-header {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 16px;
+            cursor: pointer;
+            padding: 8px 0;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .instructions-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .instructions-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            font-size: 14px;
+        }
+        
+        .step {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 28px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left;
+        }
+        
+        .step-num {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        
+        .step-num-ios {
+            background: #007aff;
+            color: #fff;
+        }
+        
+        .step-num-android {
+            background: #3ddc84;
+            color: #000;
+        }
+        
+        .step-content {
+            flex: 1;
+            padding-top: 6px;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .step-desc {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .step-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--bg-card);
+            padding: 6px 10px;
+            border-radius: 6px;
+            margin-top: 8px;
+            font-size: 13px;
+        }
+        
+        /* Desktop view */
+        .desktop-message {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .desktop-icon {
+            font-size: 64px;
+            margin-bottom: 24px;
+            opacity: 0.5;
+        }
+        
+        .desktop-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        
+        .desktop-msg {
+            color: var(--text-secondary);
+            max-width: 320px;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+        
+        .qr-code {
+            border-radius: 12px;
+            margin-bottom: 8px;
+        }
+        
+        .qr-url {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        /* Hide mobile installer on desktop, show desktop message */
+        @media (min-width: 768px) and (hover: hover) {
+            #installer .installer-content,
+            #installer .instructions-screen {
+                display: none !important;
+            }
+            #installer .desktop-message {
+                display: flex !important;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- ========================================
+         INSTALLER LANDING PAGE
+         Only shown when accessed in browser (not standalone PWA)
+         ======================================== -->
+    <div id="installer">
+        <!-- Landing Screen -->
+        <div class="installer-content" id="installer-landing">
+            <div class="app-icon">
+                <img src="icons/icon-192.png" alt="Pyro Logger">
+            </div>
+            <h1 class="app-title">Pyro Logger</h1>
+            <p class="app-tagline">Work logging for pyrotechnicians</p>
+            
+            <button class="install-btn btn-ios" onclick="showScreen('ios-instructions')">
+                <span></span>
+                Install on iPhone/iPad
+            </button>
+            
+            <button class="install-btn btn-android" onclick="showScreen('android-instructions')">
+                <span>🤖</span>
+                Install on Android
+            </button>
+            
+            <p class="already-installed">
+                Already installed? Open from your home screen.
+            </p>
+        </div>
+        
+        <!-- iOS Instructions Screen -->
+        <div class="instructions-screen" id="ios-instructions">
+            <div class="instructions-header">
+                <button class="back-btn" onclick="showScreen('installer-landing')">← Back</button>
+                <h2 class="instructions-title">Install on iPhone/iPad</h2>
+                <p class="instructions-subtitle">Follow these steps to add Pyro Logger to your home screen</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-num step-num-ios">1</div>
+                <div class="step-content">
+                    <div class="step-title">Tap the Share button</div>
+                    <div class="step-desc">Find it at the bottom of your Safari browser</div>
+                    <div class="step-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v13M19 9l-7-7-7 7M5 21h14"/>
+                        </svg>
+                        Share
+                    </div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-num step-num-ios">2</div>
+                <div class="step-content">
+                    <div class="step-title">Scroll down and tap "Add to Home Screen"</div>
+                    <div class="step-desc">You may need to scroll to find this option</div>
+                    <div class="step-icon">➕ Add to Home Screen</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-num step-num-ios">3</div>
+                <div class="step-content">
+                    <div class="step-title">Tap "Add" in the top right</div>
+                    <div class="step-desc">The app name will be "Pyro Logger"</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-num step-num-ios">4</div>
+                <div class="step-content">
+                    <div class="step-title">Open from your home screen</div>
+                    <div class="step-desc">Find the Pyro Logger icon and tap to open</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Android Instructions Screen -->
+        <div class="instructions-screen" id="android-instructions">
+            <div class="instructions-header">
+                <button class="back-btn" onclick="showScreen('installer-landing')">← Back</button>
+                <h2 class="instructions-title">Install on Android</h2>
+                <p class="instructions-subtitle">Follow these steps to add Pyro Logger to your home screen</p>
+            </div>
+            
+            <div class="step">
+                <div class="step-num step-num-android">1</div>
+                <div class="step-content">
+                    <div class="step-title">Tap the menu button</div>
+                    <div class="step-desc">Look for ⋮ (three dots) in Chrome's top right corner</div>
+                    <div class="step-icon">⋮ Menu</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-num step-num-android">2</div>
+                <div class="step-content">
+                    <div class="step-title">Tap "Install app" or "Add to Home screen"</div>
+                    <div class="step-desc">The wording varies by browser version</div>
+                    <div class="step-icon">📲 Install app</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-num step-num-android">3</div>
+                <div class="step-content">
+                    <div class="step-title">Confirm the installation</div>
+                    <div class="step-desc">Tap "Install" when prompted</div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-num step-num-android">4</div>
+                <div class="step-content">
+                    <div class="step-title">Open from your home screen</div>
+                    <div class="step-desc">Find the Pyro Logger icon and tap to open</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Desktop Message -->
+        <div class="desktop-message">
+            <div class="desktop-icon">📱</div>
+            <h2 class="desktop-title">Mobile App Only</h2>
+            <p class="desktop-msg">
+                Pyro Logger is designed for mobile devices. Scan the QR code with your phone to install.
+            </p>
+            <img class="qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://thegdyne.github.io/pyro-logger/" alt="QR Code to Pyro Logger">
+            <p class="qr-url">thegdyne.github.io/pyro-logger</p>
+        </div>
+    </div>
+    
+    <!-- ========================================
+         MAIN APP
+         Only shown when running as installed PWA (standalone mode)
+         ======================================== -->
+    <div id="app">
     <div class="container">
         <h1>Weekly Pyrotechnic Work Experience Log</h1>
         <p class="subtitle">Joint Industry SFX Grading Scheme</p>
@@ -431,6 +816,7 @@
             <div id="entriesList"></div>
         </div>
     </div>
+    </div> <!-- end #app -->
 
     <!-- jsPDF library embedded -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -947,13 +1333,62 @@
     </script>
     <script src="https://unpkg.com/@capacitor/core@latest/dist/capacitor.js"></script>
     
+    <!-- Installer Navigation -->
+    <script>
+        // Screen navigation for installer
+        function showScreen(screenId) {
+            // Hide all screens
+            document.querySelectorAll('.installer-content, .instructions-screen').forEach(el => {
+                el.style.display = 'none';
+                el.classList.remove('active');
+            });
+            
+            // Show requested screen
+            const screen = document.getElementById(screenId);
+            if (screen) {
+                screen.style.display = 'block';
+                screen.classList.add('active');
+            }
+        }
+        
+        // iOS standalone detection (fallback for older iOS)
+        if (window.navigator.standalone === true) {
+            document.getElementById('installer').style.display = 'none';
+            document.getElementById('app').style.display = 'block';
+        }
+        
+        // Android: Try to trigger native install prompt
+        let deferredInstallPrompt = null;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredInstallPrompt = e;
+            
+            // Update Android button to use native prompt
+            const androidBtn = document.querySelector('.btn-android');
+            if (androidBtn) {
+                androidBtn.onclick = async () => {
+                    if (deferredInstallPrompt) {
+                        deferredInstallPrompt.prompt();
+                        const result = await deferredInstallPrompt.userChoice;
+                        if (result.outcome === 'accepted') {
+                            console.log('PWA installed via prompt');
+                        }
+                        deferredInstallPrompt = null;
+                    } else {
+                        showScreen('android-instructions');
+                    }
+                };
+            }
+        });
+    </script>
+    
     <!-- Service Worker Registration -->
     <script>
         // Register service worker for PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', async () => {
                 try {
-                    const registration = await navigator.serviceWorker.register('/service-worker.js');
+                    const registration = await navigator.serviceWorker.register('service-worker.js');
                     console.log('SW registered:', registration.scope);
                     
                     // Check for updates periodically
