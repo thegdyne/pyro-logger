@@ -790,18 +790,18 @@
             <h2>Work Description</h2>
             <div class="form-group">
                 <label for="effect">Describe Effect Required</label>
-                <textarea id="effect" maxlength="500"></textarea>
-                <div class="char-count" id="effect-count">0 / 500</div>
+                <textarea id="effect" maxlength="325" data-max-lines="5"></textarea>
+                <div class="char-count" id="effect-count">0 / 5 lines</div>
             </div>
             <div class="form-group">
                 <label for="explosives">Type, Make and Amount of Explosives/Pyrotechnics Used</label>
-                <textarea id="explosives" maxlength="500"></textarea>
-                <div class="char-count" id="explosives-count">0 / 500</div>
+                <textarea id="explosives" maxlength="1430" data-max-lines="15" data-expand-lines="22"></textarea>
+                <div class="char-count" id="explosives-count">0 / 15 lines</div>
             </div>
             <div class="form-group">
                 <label for="involvement">Your Involvement in Handling and Type of Work Carried Out</label>
-                <textarea id="involvement" maxlength="500"></textarea>
-                <div class="char-count" id="involvement-count">0 / 500</div>
+                <textarea id="involvement" maxlength="325" data-max-lines="5"></textarea>
+                <div class="char-count" id="involvement-count">0 / 5 lines</div>
             </div>
         </div>
         
@@ -828,10 +828,37 @@
         ['effect', 'explosives', 'involvement'].forEach(id => {
             const textarea = document.getElementById(id);
             const counter = document.getElementById(id + '-count');
+            const maxLines = parseInt(textarea.dataset.maxLines) || 5;
+            const expandLines = parseInt(textarea.dataset.expandLines) || maxLines;
+            const charsPerLine = 65;
+            
             textarea.addEventListener('input', function() {
-                const len = this.value.length;
-                counter.textContent = `${len} / 500`;
-                counter.className = 'char-count' + (len > 450 ? (len >= 500 ? ' error' : ' warning') : '');
+                const text = this.value;
+                // Count lines: explicit newlines + wrapped lines
+                const explicitLines = text.split('\n');
+                let totalLines = 0;
+                explicitLines.forEach(line => {
+                    totalLines += Math.max(1, Math.ceil(line.length / charsPerLine));
+                });
+                
+                // Update counter
+                const displayMax = (id === 'explosives' && totalLines > maxLines) ? expandLines : maxLines;
+                counter.textContent = `${totalLines} / ${displayMax} lines`;
+                
+                // Warning/error states
+                const pct = totalLines / expandLines;
+                if (totalLines > expandLines) {
+                    counter.className = 'char-count error';
+                } else if (totalLines > maxLines) {
+                    counter.className = 'char-count warning';
+                    if (id === 'explosives') {
+                        counter.textContent = `${totalLines} / ${expandLines} lines (expanded)`;
+                    }
+                } else if (pct > 0.8) {
+                    counter.className = 'char-count warning';
+                } else {
+                    counter.className = 'char-count';
+                }
             });
         });
         
@@ -1100,7 +1127,12 @@
             // Explosives used
             doc.text('Please state type, make and amount of explosives and pyrotechnics used:', leftMargin, y);
             y += 5;
-            drawTextArea(doc, leftMargin, y, contentWidth, 120, data.explosives);
+            // Calculate box height based on content (base 205pt, max 305pt)
+            const explosivesLines = data.explosives ? Math.max(1, data.explosives.split('\n').reduce((acc, line) => acc + Math.max(1, Math.ceil(line.length / 65)), 0)) : 0;
+            const explosivesBaseHeight = 205;
+            const explosivesMaxHeight = 305;
+            const explosivesNeededHeight = Math.max(explosivesBaseHeight, Math.min(explosivesMaxHeight, explosivesLines * 14 + 10));
+            drawTextArea(doc, leftMargin, y, contentWidth, explosivesNeededHeight, data.explosives);
             
             // === PAGE 2 ===
             doc.addPage();
@@ -1112,8 +1144,8 @@
             y += 14;
             doc.text('of work carried out:', leftMargin, y);
             y += 5;
-            drawTextArea(doc, leftMargin, y, contentWidth, 100, data.involvement);
-            y += 115;
+            drawTextArea(doc, leftMargin, y, contentWidth, 80, data.involvement);
+            y += 95;
             
             // Confirmation statement
             doc.text('I confirm that the above information is an accurate record of the applicants\' pyrotechnic', leftMargin, y);
