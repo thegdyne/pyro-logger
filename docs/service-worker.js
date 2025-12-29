@@ -1,5 +1,5 @@
 // Pyro Logger Service Worker
-const CACHE_NAME = 'pyro-logger-v8';
+const CACHE_NAME = 'pyro-logger-v9';
 const STATIC_ASSETS = [
   '/pyro-logger/',
   '/pyro-logger/index.html',

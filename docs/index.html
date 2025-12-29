@@ -906,6 +906,29 @@
         
         function saveEntry() {
             const data = getFormData();
+            
+            // Check line limits before saving
+            const charsPerLine = 60;
+            function countLines(text) {
+                if (!text) return 0;
+                let lines = 0;
+                text.split('\n').forEach(line => {
+                    lines += Math.max(1, Math.ceil(line.length / charsPerLine));
+                });
+                return lines;
+            }
+            
+            const limits = { effect: 5, explosives: 15, involvement: 7 };
+            const errors = [];
+            if (countLines(data.effect) > limits.effect) errors.push(`Effect: ${countLines(data.effect)}/${limits.effect} lines`);
+            if (countLines(data.explosives) > limits.explosives) errors.push(`Explosives: ${countLines(data.explosives)}/${limits.explosives} lines`);
+            if (countLines(data.involvement) > limits.involvement) errors.push(`Involvement: ${countLines(data.involvement)}/${limits.involvement} lines`);
+            
+            if (errors.length > 0) {
+                alert('Too many lines - please shorten:\n\n' + errors.join('\n'));
+                return;
+            }
+            
             const entries = getEntries();
             
             // Use date+name as unique key, update if exists
