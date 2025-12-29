@@ -89,6 +89,19 @@ jobs:
           
           echo "Patched page title to: ${APP_NAME}"
       
+      - name: Add DEV banner to app
+        if: steps.env.outputs.env == 'dev'
+        run: |
+          cd docs
+          
+          # Inject CSS for dev banner
+          sed -i 's|</style>|.dev-banner { position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(90deg, #ea580c, #f97316); color: white; text-align: center; padding: 6px 12px; font-weight: bold; font-size: 12px; z-index: 9999; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 2px 4px rgba(0,0,0,0.3); } body { padding-top: 32px !important; }</style>|' index.html
+          
+          # Inject banner HTML after opening body tag
+          sed -i 's|<body>|<body><div class="dev-banner">⚠️ Development Environment - Not for production use</div>|' index.html
+          
+          echo "Added DEV banner to app"
+      
       - name: Patch service worker
         run: |
           cd docs
